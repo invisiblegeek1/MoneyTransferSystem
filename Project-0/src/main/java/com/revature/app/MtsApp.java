@@ -9,9 +9,8 @@ public class MtsApp {
 	static JdbcMainRepository todorepository = new JdbcMainRepository();
 	
 	//Main function for the process.
-	public static void main(String []args) {
-		
-		
+	public static void main(String []args) {		
+		//Details
 		System.out.println("Welcome to Banking System...\n"
 				+ "Select the process...\n"
 				+ "1.Deposit\n"

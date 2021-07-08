@@ -1,5 +1,6 @@
 package com.revature.repository;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -46,7 +47,7 @@ public class JdbcMainRepository implements MainRepository{
 			}
 		}
 	}
-	
+	@Override
 	public void Transaction() {
 		Connection con =null;
 		try {
@@ -54,11 +55,11 @@ public class JdbcMainRepository implements MainRepository{
 			Scanner sc = new Scanner(System.in);
 			//Enter the TransferDetails
 			System.out.println("Enter the Details......");
-			System.out.println("Enter the FromAccount:");
+			System.out.println("Enter the Your Account Number:");
 			int fromAcc = sc.nextInt();
-			System.out.println("Enter the ToAccount:");
+			System.out.println("Enter the ToAccount Number:");
 			int toAcc = sc.nextInt();
-			System.out.println("Enter the amount to Transfer");
+			System.out.println("Enter the Amount to Transfer");
 			double Amount = sc.nextDouble();
 			
 			//Fetch the from Account Balance
@@ -121,6 +122,9 @@ public class JdbcMainRepository implements MainRepository{
 				UpdateTransact(FromAccount,ToAccount,Amount,con);
 				
 			}
+			else {
+				System.out.println("Insufficient Balance..");
+			}
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -145,6 +149,7 @@ public class JdbcMainRepository implements MainRepository{
 			int rowcount = ps2.executeUpdate();
 			if(rowcount == 1) {
 				System.out.println("Tranasaction Updated."+FromAccount.getAccHolderName());
+				System.out.println("Balance is"+FromAccount.getBalance());
 			}
 			String q3 = "insert into transferinfo(User,Amount,Type,Date) values (?,?,?,?)";
 			PreparedStatement ps3 = con.prepareStatement(q3);
@@ -156,6 +161,7 @@ public class JdbcMainRepository implements MainRepository{
 			int rowcount1 = ps3.executeUpdate();
 			if(rowcount1 == 1) {
 				System.out.println("Tranasaction Updated."+ToAccount.getAccHolderName());
+				System.out.println("Balance is"+ToAccount.getBalance());
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -166,7 +172,7 @@ public class JdbcMainRepository implements MainRepository{
 		Connection con = null;
 		try {
 			con =ConnectionFactory.getConnection();
-			String query = "SELECT  * FROM  transferinfo limit 5";
+			String query = "SELECT  * FROM  transferinfo limit 10";
 			
 			Statement stm = con.createStatement();
 			ResultSet rst = stm.executeQuery(query);
@@ -185,7 +191,10 @@ public class JdbcMainRepository implements MainRepository{
 		Connection con = null;
 		try {
 			con =ConnectionFactory.getConnection();
-			String query = "SELECT * FROM transferinfo WHERE Date ='2021-07-08'";
+//			Scanner sc = new Scanner(System.in);
+//			System.out.println("Enter the date:");
+//			String Date = sc.next();
+			String query = "SELECT * FROM transferinfo WHERE Date ='2021-05-06'";
 			
 			Statement stm = con.createStatement();
 			ResultSet rst = stm.executeQuery(query);
