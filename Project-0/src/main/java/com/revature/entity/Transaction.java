@@ -61,4 +61,9 @@ public class Transaction {
 		return "Transaction [ fromAcc=" +FromAccount +",ToAcc=" +ToAccount +",Amount=" + Amount + ",Type" + Type + ",Date="+ Date +"]";
 	}
 
+	public String getAccHolderName() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

@@ -7,7 +7,8 @@ public interface MainRepository {
 	void deposit(User user);
 	//void withdraw(User user);
 	void Transaction();
-	
+	void TopTen();
+	void MonthlyTransaction();
 	
 	
 	

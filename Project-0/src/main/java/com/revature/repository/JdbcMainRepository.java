@@ -135,28 +135,66 @@ public class JdbcMainRepository implements MainRepository{
 //		String date = ft.format(dateNow);
 		
 		try {
-			String q = "insert into transferinfo(User,Amount,Type,Date) values (?,?,?,?)";
-			PreparedStatement ps = con.prepareStatement(q);
-			ps.setString(1,FromAccount.getAccHolderName());
-			ps.setDouble(2,Amount);
-			ps.setString(3,"Dedited");
-			ps.setString(4,date);
+			String q2 = "insert into transferinfo(User,Amount,Type,Date) values (?,?,?,?)";
+			PreparedStatement ps2 = con.prepareStatement(q2);
+			ps2.setString(1,FromAccount.getAccHolderName());
+			ps2.setDouble(2,Amount);
+			ps2.setString(3,"Debited");
+			ps2.setString(4,date);
 			
-			int rowcount = ps.executeUpdate();
+			int rowcount = ps2.executeUpdate();
 			if(rowcount == 1) {
-				System.out.println("Tranasaction Updated.");
+				System.out.println("Tranasaction Updated."+FromAccount.getAccHolderName());
 			}
-			String q1 = "insert into transferinfo(User,Amount,Type,Date) values (?,?,?,?)";
-			PreparedStatement ps1 = con.prepareStatement(q);
-			ps1.setString(1,ToAccount.getAccHolderName());
-			ps1.setDouble(2,Amount);
-			ps1.setString(3,"Credited");
-			ps1.setString(4,date);
+			String q3 = "insert into transferinfo(User,Amount,Type,Date) values (?,?,?,?)";
+			PreparedStatement ps3 = con.prepareStatement(q3);
+			ps3.setString(1,ToAccount.getAccHolderName());
+			ps3.setDouble(2,Amount);
+			ps3.setString(3,"Credited");
+			ps3.setString(4,date);
 			
-			int rowcount1 = ps.executeUpdate();
+			int rowcount1 = ps3.executeUpdate();
 			if(rowcount1 == 1) {
-				System.out.println("Tranasaction Updated.");
+				System.out.println("Tranasaction Updated."+ToAccount.getAccHolderName());
 			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+	}
+	public void TopTen() {
+		Connection con = null;
+		try {
+			con =ConnectionFactory.getConnection();
+			String query = "SELECT  * FROM  transferinfo limit 5";
+			
+			Statement stm = con.createStatement();
+			ResultSet rst = stm.executeQuery(query);
+			
+			while(rst.next())
+			{
+				System.out.println(rst.getString(1)+" "+ rst.getString(2)+" "+rst.getString(3));
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+	}
+	public void MonthlyTransaction() {
+		Connection con = null;
+		try {
+			con =ConnectionFactory.getConnection();
+			String query = "SELECT * FROM transferinfo WHERE Date ='2021-07-08'";
+			
+			Statement stm = con.createStatement();
+			ResultSet rst = stm.executeQuery(query);
+			
+			while(rst.next())
+			{
+				System.out.println(rst.getString(1)+" "+ rst.getString(2)+" "+rst.getString(3));
+			}
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
