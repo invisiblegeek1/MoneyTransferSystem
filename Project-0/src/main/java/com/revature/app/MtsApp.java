@@ -7,7 +7,7 @@ import com.revature.repository.JdbcMainRepository;
 public class MtsApp {
 	
 	static JdbcMainRepository todorepository = new JdbcMainRepository();
-	
+	static Scanner sc = new Scanner(System.in);
 	//Main function for the process.
 	public static void main(String []args) {		
 		//Details
@@ -16,7 +16,8 @@ public class MtsApp {
 				+ "1.Deposit\n"
 				+ "2.Money Transfer\n"
 				+ "3.TopTen Transaction.\n"
-				+ "4.Monthly Transacrion.\n");
+				+ "4.Monthly Transacrion.\n"
+				+ "Enter Your Choice:");
 		@SuppressWarnings("resource")
 		Scanner sc = new Scanner(System.in);
 		int method = sc.nextInt();
@@ -26,7 +27,7 @@ public class MtsApp {
 	static void mainmethod(int method){
 		switch (method) {
 		case 1:
-	//			todorepository.deposit();
+				todorepository.deposit();
 			break;
 		case 2:
 			todorepository.Transaction();

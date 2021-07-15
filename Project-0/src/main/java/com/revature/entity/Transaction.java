@@ -1,35 +1,35 @@
 package com.revature.entity;
 
 public class Transaction {
-	private int FromAccount;
-	private int ToAccount;
+	private int fromAcc;
+	private int toAcc;
 	private int Amount;
 	private String Type;
 	private String Date;
 	
 	public Transaction(int FromAccount,int ToAccount, int Amount, String Type,String Date) {
 		super();
-		this.FromAccount = FromAccount;
-		this.ToAccount = ToAccount;
+		this.fromAcc = FromAccount;
+		this.toAcc = ToAccount;
 		this.Amount = Amount;
 		this.Type = Type;
 		this.Date = Date;
 	}
 
 	public int getFromAcc() {
-		return FromAccount;
+		return fromAcc;
 	}
 
 	public void setFromAcc(int fromAcc) {
-		this.FromAccount = fromAcc;
+		this.fromAcc = fromAcc;
 	}
 
 	public int getToAcc() {
-		return ToAccount;
+		return toAcc;
 	}
 
 	public void setToAcc(int toAcc) {
-		ToAccount = toAcc;
+		this.toAcc = toAcc;
 	}
 
 	public int getAmount() {
@@ -58,7 +58,7 @@ public class Transaction {
 
 	@Override
 	public String toString() {
-		return "Transaction [ fromAcc=" +FromAccount +",ToAcc=" +ToAccount +",Amount=" + Amount + ",Type" + Type + ",Date="+ Date +"]";
+		return "Transaction [ fromAcc=" +fromAcc +",ToAcc=" +toAcc +",Amount=" + Amount + ",Type" + Type + ",Date="+ Date +"]";
 	}
 
 	public String getAccHolderName() {
