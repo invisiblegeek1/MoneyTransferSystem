@@ -10,19 +10,22 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import javax.security.auth.login.AccountException;
+
 import org.apache.log4j.Logger;
 
 import com.revature.Exception.AccountBalanceException;
 //import com.revature.Exception.AccountBalanceException;
 import com.revature.Exception.AccountNotFoundExeption;
 import com.revature.Exception.DateNotFoundExeption;
+import com.revature.Exception.InvalidEnteriesException;
 import com.revature.connection.ConnectionFactory;
 import com.revature.entity.User;
 
 public class JdbcMainRepository implements MainRepository{
 	
 	private static Logger logger = Logger.getLogger("From Transfering-system\n");
-	public void deposit() {
+	public void deposit()  {
 		Connection con =null;
 		logger.info("Deposit System intiated...");
 		//Declaring Variables
@@ -33,15 +36,11 @@ public class JdbcMainRepository implements MainRepository{
 		int AccNumber = sc.nextInt();
 		System.out.println("Enter the Amount to Deposit:");
 		double Amount = sc.nextDouble();
+		if(AccHolderName == null | AccNumber <=0 |Amount <= 0) {
+			logger.error("Invalid Enteries.");
+		}
 		try {
 			con = ConnectionFactory.getConnection();
-			//Get the current Balance
-			String query1 ="select * from userinfo where AccNumber = '"+AccNumber+"'";
-			PreparedStatement p1 = con.prepareStatement(query1);
-			ResultSet r1 = p1.executeQuery(query1);
-			r1.next();
-			double Balance = r1.getDouble(3);
-			System.out.println(Balance);
 			
 			ArrayList<Integer> AccNumberList = new ArrayList<Integer>();
 			String query ="select * from userinfo";
@@ -54,6 +53,14 @@ public class JdbcMainRepository implements MainRepository{
 			
 			//Checking the Existing User:
 			if(AccNumberList.contains(AccNumber)) {
+				//Get the current Balance
+				String query1 ="select * from userinfo where AccNumber = '"+AccNumber+"'";
+				PreparedStatement p1 = con.prepareStatement(query1);
+				ResultSet r1 = p1.executeQuery(query1);
+				r1.next();
+				double Balance = r1.getDouble(3);
+				System.out.println(Balance);
+				//Update the balance 
 				String sql = "update userinfo set balance = ? where AccNumber = ?;";
 				PreparedStatement ps = con.prepareStatement(sql);
 //				ps.setString(1, AccHolderName);
@@ -77,8 +84,6 @@ public class JdbcMainRepository implements MainRepository{
 				if (rowCount == 1) {
 					System.out.println("Account Created and Money Deposited Successfully..");
 				}	
-//				newDeposit(AccHolderName,AccNumber,Amount);
-				System.out.println("False");
 			}	
 		}catch(SQLException e) {
 			e.printStackTrace();
@@ -90,24 +95,7 @@ public class JdbcMainRepository implements MainRepository{
 			}
 		}
 	}
-	public void newDeposit(String AccHolderName,int AccNumber, double Amount) {
-		Connection con =null;
-		logger.info("Deposit System intiated...");
-		try {
-			con = ConnectionFactory.getConnection();
-			String sql1 = "insert into userinfo(AccHolderName,AccNumber,Balance) values (?,?,?)";
-			PreparedStatement ps = con.prepareStatement(sql1);
-			ps.setString(1, AccHolderName);
-			ps.setInt(2, AccNumber);
-			ps.setDouble(3, Amount);
-			int rowCount = ps.executeUpdate();
-			if (rowCount == 1) {
-				System.out.println("Account Created and Money Deposited Successfully..");
-			}	
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
+
 	@Override
 	public void Transaction() {
 		Connection con =null;
@@ -116,24 +104,28 @@ public class JdbcMainRepository implements MainRepository{
 			con = ConnectionFactory.getConnection();
 			Scanner sc = new Scanner(System.in);
 			//Enter the TransferDetails
-			
 			System.out.println("Enter the Details......");
 			System.out.println("Enter the Your Account Number:");
 			int fromAcc = sc.nextInt();
 			System.out.println("Enter the ToAccount Number:");
 			int toAcc = sc.nextInt();
 			System.out.println("Enter the Amount to Transfer");
-			double Amount = sc.nextDouble();	
-			if (fromAcc == 0) {
+			double Amount = sc.nextDouble();
+			
+			if (fromAcc <= 0) {
 				logger.error("account not found " + fromAcc);
 				throw new AccountNotFoundExeption(fromAcc);
 			}
 
-			if (toAcc == 0) {
+			if (toAcc <= 0) {
 				logger.error("account not found " + toAcc);
 				throw new AccountNotFoundExeption(toAcc);
 			}
-
+			
+			if(Amount <= 0) {
+				logger.error("Invalid Enteries.");
+				throw new InvalidEnteriesException(Amount);
+			}
 			
 			
 			//Fetch the from Account Balance
@@ -158,7 +150,7 @@ public class JdbcMainRepository implements MainRepository{
 			
 			
 			
-		}catch(SQLException | AccountNotFoundExeption e) {
+		}catch(SQLException | AccountNotFoundExeption | InvalidEnteriesException e) {
 			e.printStackTrace();
 		}finally {
 			try {
@@ -213,7 +205,7 @@ public class JdbcMainRepository implements MainRepository{
 		String date = today.toString();
 //		SimpleDateFormat ft = new SimpleDateFormat("dd.MM.yyy");
 //		String date = ft.format(dateNow);
-		Logger logger = Logger.getLogger("Updating-system");
+		Logger logger = Logger.getLogger("Updating-system initiated");
 		try {
 			String q2 = "insert into transferinfo(User,Amount,Type,Date) values (?,?,?,?)";
 			PreparedStatement ps2 = con.prepareStatement(q2);
@@ -263,6 +255,7 @@ public class JdbcMainRepository implements MainRepository{
 				System.out.println("AccountHolderName:"+rst.getString(1)+"\nAmount : "+ rst.getString(2)+"\n Type: "+rst.getString(3));
 				System.out.println("---------------------------------------");
 			}
+			logger.info("Successfully Executed");
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -294,6 +287,7 @@ public class JdbcMainRepository implements MainRepository{
 				System.out.println(rst.getString(1)+" "+ rst.getString(2)+" "+rst.getString(3));
 				System.out.println("---------------------------------------");
 			}
+			logger.info("Successfullly Executed");
 			
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -1,5 +1,6 @@
 package com.revature.repository;
 
+import com.revature.Exception.InvalidEnteriesException;
 import com.revature.entity.User;
 
 public interface MainRepository {
