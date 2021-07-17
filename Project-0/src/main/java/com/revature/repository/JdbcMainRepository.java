@@ -20,6 +20,7 @@ import com.revature.Exception.AccountNotFoundExeption;
 import com.revature.Exception.DateNotFoundExeption;
 import com.revature.Exception.InvalidEnteriesException;
 import com.revature.connection.ConnectionFactory;
+import com.revature.entity.Type;
 import com.revature.entity.User;
 
 public class JdbcMainRepository implements MainRepository{
@@ -27,7 +28,7 @@ public class JdbcMainRepository implements MainRepository{
 	private static Logger logger = Logger.getLogger("From Transfering-system\n");
 	public void deposit()  {
 		Connection con =null;
-		logger.info("Deposit System intiated...");
+		
 		//Declaring Variables
 		Scanner sc=new Scanner(System.in);
 		System.out.println("Enter the AccounHolderName:");
@@ -39,69 +40,193 @@ public class JdbcMainRepository implements MainRepository{
 		if(AccHolderName == null | AccNumber <=0 |Amount <= 0) {
 			logger.error("Invalid Enteries.");
 		}
-		try {
-			con = ConnectionFactory.getConnection();
-			
-			ArrayList<Integer> AccNumberList = new ArrayList<Integer>();
-			String query ="select * from userinfo";
-			PreparedStatement p = con.prepareStatement(query);
-			ResultSet r = p.executeQuery(query);
-			while(r.next()) {
-				AccNumberList.add(r.getInt(2));
-			}
-			System.out.println(AccNumberList);
-			
-			//Checking the Existing User:
-			if(AccNumberList.contains(AccNumber)) {
-				//Get the current Balance
-				String query1 ="select * from userinfo where AccNumber = '"+AccNumber+"'";
-				PreparedStatement p1 = con.prepareStatement(query1);
-				ResultSet r1 = p1.executeQuery(query1);
-				r1.next();
-				double Balance = r1.getDouble(3);
-				System.out.println(Balance);
-				//Update the balance 
-				String sql = "update userinfo set balance = ? where AccNumber = ?;";
-				PreparedStatement ps = con.prepareStatement(sql);
-//				ps.setString(1, AccHolderName);
-//				AccNumber.setBalance(User.getBalance() + Amount);
-				Balance = Amount + Balance;
-				ps.setInt(2, AccNumber);
-				ps.setDouble(1, Balance);
-				int rowCount = ps.executeUpdate();
-				if (rowCount == 1) {
-					System.out.println("Money Deposited Successfully..");
-				}	
-			}
-			else 
-			{
-				String sql1 = "insert into userinfo(AccHolderName,AccNumber,Balance) values (?,?,?)";
-				PreparedStatement ps = con.prepareStatement(sql1);
-				ps.setString(1, AccHolderName);
-				ps.setInt(2, AccNumber);
-				ps.setDouble(3, Amount);
-				int rowCount = ps.executeUpdate();
-				if (rowCount == 1) {
-					System.out.println("Account Created and Money Deposited Successfully..");
-				}	
-			}	
-		}catch(SQLException e) {
-			e.printStackTrace();
-		}finally {
+		else {
 			try {
-				con.close();
-			} catch (SQLException e) {
+				con = ConnectionFactory.getConnection();
+				logger.info("Deposit System intiated...");
+				ArrayList<Integer> AccNumberList = new ArrayList<Integer>();
+				String query ="select * from userinfo";
+				PreparedStatement p = con.prepareStatement(query);
+				ResultSet r = p.executeQuery(query);
+				while(r.next()) {
+					AccNumberList.add(r.getInt(2));
+				}
+				System.out.println(AccNumberList);
+				
+				//Checking the Existing User:
+				if(Amount > 0) {
+					
+					if(AccNumberList.contains(AccNumber)) {
+						//Get the current Balance
+						String query1 ="select * from userinfo where AccNumber = '"+AccNumber+"'and AccHolderName = '"+AccHolderName+"'";
+						PreparedStatement p1 = con.prepareStatement(query1);
+						ResultSet r1 = p1.executeQuery(query1);
+						r1.next();
+						double Balance = r1.getDouble(3);
+						System.out.println(Balance);
+						//Update the balance 
+						String sql = "update userinfo set balance = ? where AccNumber = ?;";
+						PreparedStatement ps = con.prepareStatement(sql);
+	//					ps.setString(1, AccHolderName);
+	//					AccNumber.setBalance(User.getBalance() + Amount);
+						Balance = Amount + Balance;
+						ps.setInt(2, AccNumber);
+						ps.setDouble(1, Balance);
+						int rowCount = ps.executeUpdate();
+						if (rowCount == 1) {
+							System.out.println("Money Deposited Successfully..");
+							UpdateTransact(AccHolderName, Amount, Type.DEBIT, con);
+						}	
+					}
+					else 
+					{
+						String sql1 = "insert into userinfo(AccHolderName,AccNumber,Balance) values (?,?,?)";
+						PreparedStatement ps = con.prepareStatement(sql1);
+						ps.setString(1, AccHolderName);
+						ps.setInt(2, AccNumber);
+						ps.setDouble(3, Amount);
+						int rowCount = ps.executeUpdate();
+						if (rowCount == 1) {
+							System.out.println("Account Created and Money Deposited Successfully..");
+							UpdateTransact(AccHolderName, Amount, Type.CREDIT, con);
+						}	
+					}
+					
+				}
+				else {
+					logger.info("Invalide Entries.");
+				}
+					
+			}catch(SQLException e) {
 				e.printStackTrace();
+			}finally {
+				try {
+					con.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
 			}
+			
 		}
 	}
 
+	public void withdraw() {
+		Connection con =null;
+		
+		//Declaring Variables
+		Scanner sc=new Scanner(System.in);
+		System.out.println("Enter the AccounHolderName:");
+		String AccHolderName = sc.next();
+		System.out.println("Enter the AccountNumber:");
+		int AccNumber = sc.nextInt();
+		System.out.println("Enter the Amount to Withdraw:");
+		double Amount = sc.nextDouble();
+		if(AccHolderName == null | AccNumber <=0) {
+			logger.error("Invalid Enteries.");
+		}
+		else {
+			try {
+				con = ConnectionFactory.getConnection();
+				logger.info("Withdraw System intiated...");
+				ArrayList<Integer> AccNumberList = new ArrayList<Integer>();
+				String query ="select * from userinfo";
+				PreparedStatement p = con.prepareStatement(query);
+				ResultSet r = p.executeQuery(query);
+				while(r.next()) {
+					AccNumberList.add(r.getInt(2));
+				}
+	//			System.out.println(AccNumberList);
+				
+				//Checking the Existing User:
+				if(Amount>=0) {
+					
+					if(AccNumberList.contains(AccNumber)) {
+						//Get the current Balance
+						String query1 ="select * from userinfo where AccNumber = '"+AccNumber+"'and AccHolderName = '"+AccHolderName+"' ";
+						PreparedStatement p1 = con.prepareStatement(query1);
+						ResultSet r1 = p1.executeQuery(query1);
+						r1.next();
+						double Balance = r1.getDouble(3);
+//						System.out.println(Balance);
+						//Update the balance 
+						if(Amount<=Balance) {
+							
+							String sql = "update userinfo set balance = ? where AccNumber = ? and AccHolderName = '"+AccHolderName+"'";
+							PreparedStatement ps = con.prepareStatement(sql);
+							Balance =Balance - Amount;
+							ps.setInt(2, AccNumber);
+							ps.setDouble(1, Balance);
+							int rowCount = ps.executeUpdate();
+							if (rowCount == 1) {
+								System.out.println("Money Withdrawed Successfully..");
+								logger.info("Successfull");
+								UpdateTransact(AccHolderName, Amount, Type.DEBIT, con);
+							}	
+							
+						}
+						else {
+							logger.error("Insufficient Balance. ");
+						}
+						
+					}
+					else 
+					{
+						logger.error("Invalid Account");
+					}
+					
+				}
+				else {
+					logger.info("Invalid Enteries.");
+				}
+					
+			}catch(SQLException e) {
+				e.printStackTrace();
+			}finally {
+				try {
+					con.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+			
+		}
+	}
+	public static void UpdateTransact(String AccHolderName,double Amount,Type type, Connection con) {
+//		Date dateNow = new Date();
+		LocalDate today = LocalDate.now();
+		String date = today.toString();
+//		SimpleDateFormat ft = new SimpleDateFormat("dd.MM.yyy");
+//		String date = ft.format(dateNow);
+		String Type = type.toString();
+		Logger logger = Logger.getLogger("Updating-system initiated");
+		try {
+			String q2 = "insert into transferinfo(User,Amount,Type,Date) values (?,?,?,?)";
+			PreparedStatement ps2 = con.prepareStatement(q2);
+			ps2.setString(1,AccHolderName);
+			ps2.setDouble(2,Amount);
+			ps2.setString(3,Type);
+			ps2.setString(4,date);
+			
+			int rowcount = ps2.executeUpdate();
+			if(rowcount == 1) {
+				System.out.println("Tranasaction of "+AccHolderName+"Amount = "+Amount+" Type =  "+type+"ED Updated.");
+//				logger.info("Balance is"+AccN.getBalance());
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+	}
+	
+	
+	
 	@Override
 	public void Transaction() {
 		Connection con =null;
-		logger.info("Transfer initiated....");
+		
 		try {
 			con = ConnectionFactory.getConnection();
+			logger.info("Transfer initiated....");
 			Scanner sc = new Scanner(System.in);
 			//Enter the TransferDetails
 			System.out.println("Enter the Details......");
@@ -239,8 +364,9 @@ public class JdbcMainRepository implements MainRepository{
 	public void TopTen() {
 		Connection con = null;
 		try {
-			logger.info("Top Ten Transaction...");
+			
 			con =ConnectionFactory.getConnection();
+			logger.info("Top Ten Transaction...");
 			Scanner sc = new Scanner(System.in);
 			System.out.println("Enter the UserName:");
 			String User = sc.next();
@@ -265,8 +391,8 @@ public class JdbcMainRepository implements MainRepository{
 	public void MonthlyTransaction() {
 		Connection con = null;
 		try {
-			logger.info("Monthly  Transaction...");
 			con =ConnectionFactory.getConnection();
+			logger.info("Monthly  Transaction...");
 			Scanner sc = new Scanner(System.in);
 			System.out.println("Enter the From date YYYY-MM-DD:");
 			String Date = sc.next();
@@ -293,55 +419,8 @@ public class JdbcMainRepository implements MainRepository{
 			e.printStackTrace();
 		}
 		
-	}
-	
-
-	
-	
-
-	
-
-	
-	
-////	public void withdraw(User user) {
-////		Connection con =null;
-////		try {
-////			con = ConnectionFactory.getConnection();
-////			@SuppressWarnings("resource")
-////			Scanner sc = new Scanner(System.in);
-////			System.out.println("Enter the Amount to Withdraw:");
-////			double amount = sc.nextDouble();
-////			double Balance = user.getBalance();
-////			
-////			if(amount<= Balance) {
-////				Balance -= amount;
-////				System.out.println(user.getAccHolderName()+" "+Balance);
-////			}else {
-////				System.out.println("Withdrawal of"+user.getAccHolderName()+"Fails due to Insufficient Balance");
-////			}
-////
-////			
-////			String sql = "insert into userinfo (AccHolderName,AccNumber,Balance,CreditorDebit) values (?,?,?,?)";
-////			PreparedStatement ps = con.prepareStatement(sql);
-////			ps.setString(1, user.getAccHolderName());
-////			ps.setInt(2, user.getAccNumber());
-////			ps.setDouble(3, Balance);
-////			ps.setString(4, "Debited");
-////			
-////			int rowCount = ps.executeUpdate();
-////			if (rowCount == 1) {
-////				System.out.println("Successfull..");
-////			}			
-////			
-////		}catch(SQLException e) {
-////			e.printStackTrace();
-////		}finally {
-////			try {
-////				con.close();
-////			} catch (SQLException e) {
-////				e.printStackTrace();
-////			}
-////		}
-//	}
-
+	}	
+		
 }
+	
+	

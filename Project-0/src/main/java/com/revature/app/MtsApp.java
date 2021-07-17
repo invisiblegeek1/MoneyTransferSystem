@@ -17,6 +17,7 @@ public class MtsApp {
 				+ "2.Money Transfer\n"
 				+ "3.TopTen Transaction.\n"
 				+ "4.Monthly Transacrion.\n"
+				+ "5.Withdraw\n"
 				+ "Enter Your Choice:");
 		@SuppressWarnings("resource")
 		Scanner sc = new Scanner(System.in);
@@ -37,6 +38,9 @@ public class MtsApp {
 			break;
 		case 4:
 			todorepository.MonthlyTransaction();
+			break;
+		case 5:
+			todorepository.withdraw();
 			break;
 		default:
 			System.out.println("Enter the Correct method.");
