@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MTS-System</title>
+    <link rel="stylesheet" href="indiex.css">
+</head>
+
+<body >
+    <div class="header">Money Transfering Services</div>
+    <nav class="Topnav" id="myTopnav">
+        <a class="active" href="index.html">Home</a>
+        <a class="active" href="account.html">Services</a>
+        <a class="active" href="transfer.html">Transfer</a>
+        <a class="active" href="transaction.html">Transactions</a>
+        <button class="button" onclick="window.location.href='login.html'">LOGIN</button>
+        <button class="button" onclick="window.location.href='login.html'">SIGN UP</button>
+    </nav>
+    <div class="home">
+    <form action="transaction-history" method="GET">
+        <label for="AccNumber">Account Number</label>
+        <input id="AccNumber" name="AccNumber">
+
+        <select name="choose" id="choose">
+            <option value="Top-10">Top 10</option>
+            <option value="from-to">From - To</option> 
+        </select>
+
+
+         <!-- <div class="from-to-form">
+            <label for="Date1">From</label>
+            <input id="Date1" name="Date1" placeholder="yyyy-mm-dd">
+            <label for="Date2">To</label>
+            <input id="Date2" name="Date2" placeholder="yyyy-mm-dd">
+        </div>  -->
+
+        <button style=" outline: none;
+        border: none;
+        border-radius: 10px;"type="submit">submit</button>
+    </form>
+</div>
+    <!--<script src="transactionHistroyForm.js"></script>-->
+
+
+
+    <style>
+
+.home{
+    margin-top: 10px;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    margin-left: 30%;
+    margin-right: 10%;
+    font-size: 120%;
+    background-color: rgba(135, 207, 235, 0.753);
+    outline: none;
+    border: none;
+    border-radius: 10px;
+    width: 37%;
+    padding: 26px;
+    }
+        </style>
+</body>
+
+</html>

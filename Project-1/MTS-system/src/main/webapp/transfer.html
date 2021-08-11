@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MTS-System</title>
+    <link rel="stylesheet" href="login.css">
+</head>
+<body>
+    <div>
+      <div class="header">Money Transfering Services</div>
+    <nav class="Topnav" id="myTopnav">
+        <a class="active" href="index.html">Home</a>
+        <a class="active" href="account.html">Services</a>
+        <a class="active" href="transfer.html">Transfer</a>
+        <a class="active" href="transaction.html">Transactions</a>
+        <button class="button" onclick="window.location.href='login.html'">LOGIN</button>
+        <button class="button" onclick="window.location.href='login.html'">SIGN UP</button>
+    </nav>
+      
+        <div>
+          <div class="container" >
+            <br>
+            <form class="forms" name="forms" action="transfer" onsubmit="return validateForm()" method="POST">
+              <p> Enter the details </p>
+              <label for="fromAcc">FromAccNum:</label><br>
+              <input type="number" id="fromAccNum" name="fromAccNum" placeholder="Enter your fromAccNum." required><br><br>
+              <label for="toAccNum">ToAccNum:</label><br>
+              <input type="number" id="toAccNum" name="toAccNum" placeholder="Enter Your ToAccNum." required ><br><br>
+              <label for="amount">Amount:</label><br>
+              <input type="number" id="amount" name="amount" placeholder="Enter Your amount." required ><br><br>
+              <button type="submit" class="buttons" value="Submit" >Transfer</button>
+            </form>
+          </div>
+          
+          <script>
+          function validateForm() {
+			  let x = document.forms["forms"]["fromAccNum"].value;
+			  let y = document.forms["forms"]["toAccNum"].value;
+			  let z = document.forms["forms"]["amount"].value;
+			  
+			  console.log(x,y,x);
+			  if (x && y && z  == "") {
+			    alert("Name must be filled out");
+			    return false;
+			  }
+			}
+          
+          
+          
+          </script>
+        
+</body>
+</html>

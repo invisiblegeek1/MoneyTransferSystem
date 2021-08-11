@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MTS-System</title>
+    <link rel="stylesheet" href="login.css">
+</head>
+<body>
+    <div>
+      <div class="header">Money Transfering Services</div>
+      <nav class="Topnav" id="myTopnav">
+          <a class="active" href="index.html">Home</a>
+          <a class="active" href="account.html">Services</a>
+          <a class="active" href="transfer.html">Transfer</a>
+          <a class="active" href="transaction.html">Transactions</a>
+          <button class="button" onclick="window.location.href='login.html'">LOGIN</button>
+          <button class="button" onclick="window.location.href='login.html'">SIGN UP</button>
+      </nav>
+      
+        <div>
+          <div class="container" >
+            <br>
+            <form class="forms" action="account.html" method="POST">
+              <p> Sign up to enjoy the services </p>
+              <label for="E-Mail">E-Mail:</label><br>
+              <input type="text" id="E-Mail" name="E-Mail" placeholder="Enter your E-Mail." ><br><br>
+              <label for="ToAccNum">Password:</label><br>
+              <input type="password" id="Password" name="Password" placeholder="Enter Your Password." ><br><br>
+              <a href="#" style=" color: black;"> Forget Password?</a>
+              <br><br>
+              <button type="submit" onclick="window.location.href='account.html'" class="buttons" value="Submit">Login</button>
+      
+              <br><br>    
+      
+              <div class="acc">Don't have account?<br>
+                  <a href="#" style=" color: black;"> Signup Now</a>
+              </div>
+              <br>
+              Or sign up using:
+              
+              
+            </form>
+          </div>
+        
+</body>
+</html>
