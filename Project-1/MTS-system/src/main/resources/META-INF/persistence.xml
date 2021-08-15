@@ -7,11 +7,11 @@
 		transaction-type="RESOURCE_LOCAL">
 		<provider>org.hibernate.ejb.HibernatePersistence</provider>
 		<properties>
-			<property name="hibernate.dialect" value="org.hibernate.dialect.MySQL5Dialect" />
-			<property name="hibernate.connection.driver_class" value="com.mysql.jdbc.Driver" />
+			<property name="hibernate.dialect" value="org.hibernate.dialect.MySQL8Dialect" />
+			<property name="hibernate.connection.driver_class" value="org.gjt.mm.mysql.Driver" />
 			<property name="hibernate.connection.url" value="jdbc:mysql://localhost:3306/project1" />	
 			<property name="hibernate.connection.username" value="root" />	
-			<property name="hibernate.connection.password" value="Sivaragul@2712" />	
+			<property name="hibernate.connection.password" value="Moorthy45$" />	
 			
 			
 			<!-- <property name="hibernate.hbm2ddl.auto" value="create-drop" /> -->
