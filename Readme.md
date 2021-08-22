@@ -18,12 +18,6 @@ It is an Web application build on Java, JPA , JSP  and SQL technologies.
 - Get transaction by filter constraints (Top 10, Last 3 month Transaction, Between from and to dates)
 - Custom Exception and unit testing.
 
-#Roles and Responsibilities
--
-
-
-
-
 ## Tech
 
 This maven project used some open sources.
