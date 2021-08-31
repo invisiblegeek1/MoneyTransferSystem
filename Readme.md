@@ -1,5 +1,5 @@
-# Project-1(Java-Web Application)
-## Money Transfering System
+
+# Money Transfering System
 
 
 It is an Web application build on Java, JPA , JSP  and SQL technologies.
